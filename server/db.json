@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Mateus",
+      "email": "mateus@jstack.com.br"
+    },
+    {
+      "id": 2,
+      "name": "Luisa",
+      "email": "luisa@gmail.com.br"
+    },
+    {
+      "id": 3,
+      "name": "Carla",
+      "email": "carla@jstack.com.br"
+    }
+  ]
+}
