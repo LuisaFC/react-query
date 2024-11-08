@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { IUser } from "./types";
+import { sleep } from "./sleep";
 
 
 export function Users() {
-  const { data } = useQuery(
+  const { data, isLoading } = useQuery(
     {
       queryKey: ["users"],
       queryFn: async (): Promise<IUser[]> => {
+        await sleep()
         const response = await fetch("http://localhost:3000/users");
         return response.json();
       },
@@ -15,6 +17,8 @@ export function Users() {
 
   return(
     <div>
+      {isLoading && 'Carregando...'}
+
         {data?.map((user) => (
           <div key={user.id}>
             <strong className="block">{user.name}</strong>
