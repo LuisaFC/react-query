@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { IUser } from "./types";
 import { sleep } from "./sleep";
-import { useState } from "react";
 
 export function Users() {
-  const [signedIn, setSignedIn] = useState(false);
-  const { data, isLoading } = useQuery({
-    enabled: signedIn,
+
+  const { data, isLoading, refetch } = useQuery({
+    enabled: false,
     queryKey: ["users"],
     queryFn: async (): Promise<IUser[]> => {
       await sleep();
@@ -20,9 +19,9 @@ export function Users() {
       <button
         type="button"
         className="bg-white text-black px-4 py-2 rounded-lg"
-        onClick={() => setSignedIn(true)}
+        onClick={() => refetch()}
       >
-        Logar
+        Listar Usuarios
       </button>
 
       {isLoading && "Carregando..."}
