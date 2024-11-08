@@ -6,6 +6,7 @@ import { sleep } from "./sleep";
 export function Users() {
   const { data, isLoading } = useQuery(
     {
+      enabled: false,
       queryKey: ["users"],
       queryFn: async (): Promise<IUser[]> => {
         await sleep()
