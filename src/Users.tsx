@@ -4,7 +4,7 @@ import { sleep } from "./sleep";
 
 export function Users() {
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, refetch, isFetching, isPending } = useQuery({
     enabled: false,
     queryKey: ["users"],
     queryFn: async (): Promise<IUser[]> => {
@@ -13,6 +13,8 @@ export function Users() {
       return response.json();
     },
   });
+
+  console.log("Observer a alteração dos valores a cada vez que apertar o botão", isPending, isLoading, isFetching);
 
   return (
     <div>
@@ -25,6 +27,7 @@ export function Users() {
       </button>
 
       {isLoading && "Carregando..."}
+      {isFetching && <small>Fetching...</small>}
 
       {data?.map((user) => (
         <div key={user.id}>
