@@ -7,6 +7,7 @@ export function Users() {
   const { data, isLoading, refetch, isFetching, isPending } = useQuery({
     enabled: false,
     queryKey: ["users"],
+    staleTime: 5000,
     queryFn: async (): Promise<IUser[]> => {
       await sleep();
       const response = await fetch("http://localhost:3000/users");
