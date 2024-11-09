@@ -4,11 +4,8 @@ import { sleep } from "./sleep";
 
 export function Posts() {
   const {data} = useQuery({
-    enabled: false,
+    enabled: true,
     queryKey: ["users"],
-    staleTime: 5000,
-    gcTime: 10000,
-    refetchOnWindowFocus: false,
     queryFn: async (): Promise<IUser[]> => {
       await sleep();
       const response = await fetch("http://localhost:3000/users");
