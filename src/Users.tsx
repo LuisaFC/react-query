@@ -5,10 +5,10 @@ import { IUser } from "./types";
 import { sleep } from "./sleep";
 
 export function Users() {
-  const { data, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error, isError } =
+  const { data: users, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error, isError } =
     useUsers();
 
-  const {mutate, isPending} = useMutation({
+  const {mutate, isPending, data} = useMutation({
     mutationFn: async ({name, email}: {name: string, email: string}): Promise<IUser> => {
       await sleep()
       const response = await fetch("http://localhost:3000/users", {
@@ -27,6 +27,8 @@ export function Users() {
     isUsersLoading,
     isFetching
   );
+
+  console.log("data", data)
 
   useEffect(() => {}, [isError]);
 
@@ -73,7 +75,7 @@ export function Users() {
       {isFetching && <small>Fetching...</small>}
       {error && <h1 className="text-red-400">{error.toString()}</h1>}
 
-      {data?.map((user) => (
+      {users?.map((user) => (
         <div key={user.id}>
           <strong className="block">{user.name}</strong>
           <small>{user.email}</small>
