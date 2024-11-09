@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useUsers } from "./hooks/useUsers";
+import { useMutation } from "@tanstack/react-query";
 
 export function Users() {
   const { data, isLoading, refetch, isFetching, isPending, error, isError } =
     useUsers();
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const {mutate} = useMutation({
+    mutationFn: async () => {
+      console.log('Mutation func executou')
+    }
+  })
 
   console.log(
     "Observer a alteração dos valores a cada vez que apertar o botão",
@@ -20,14 +24,23 @@ export function Users() {
   function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const elements = event.currentTarget.elements as typeof event.currentTarget.elements & {
+      name: HTMLFormElement
+      email: HTMLFormElement
+    }
+
+    console.log("nome: ", elements.name.value)
+    console.log("email: ", elements.email.value)
+
+    mutate()
   }
 
   return (
     <div className="p-4">
       <div className="mb-10">
         <form className="flex flex-col gap-2" onSubmit={handleOnSubmit}>
-          <input className="outline-none p1 rounded-md text-zinc-900" type="text" placeholder="Nome" value={name} onChange={e => setName(e.target.value)}/>
-          <input className="outline-none p1 rounded-md text-zinc-900" type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}/>
+          <input className="outline-none p1 rounded-md text-zinc-900" type="text" placeholder="Nome" name="name"/>
+          <input className="outline-none p1 rounded-md text-zinc-900" type="text" placeholder="Email"name="email"/>
 
           <button className="bg-blue-400 py-2 text-zinc-950 rounded-md">Cadastrar</button>
         </form>
