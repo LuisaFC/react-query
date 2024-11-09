@@ -1,34 +1,12 @@
 import { useEffect } from "react";
 import { useUsers } from "./hooks/useUsers";
-import { useMutation } from "@tanstack/react-query";
-import { IUser } from "./types";
-import { sleep } from "./sleep";
+import { useCreateUsers } from "./hooks/useCreateUsers";
 
 export function Users() {
   const { data: users, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error: usersError, isError } =
     useUsers();
 
-  const {mutateAsync, isPending, data, error} = useMutation({
-    mutationFn: async ({name, email}: {name: string, email: string}): Promise<IUser> => {
-      await sleep()
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: {'content-type': 'application/json'},
-        body: JSON.stringify({name, email})
-      })
-
-      return response.json()
-    },
-    onError: (error, variables) => {
-      console.log(`Erro na request. \n${error.toString()} \n${variables}`)
-    },
-    onSuccess: (data, variables) => {
-      console.log("onSucess", {data, variables})
-    },
-    onSettled: () => {
-      console.log("Terminou a execução")
-    }
-  })
+  const {mutateAsync, isPending, data, error} = useCreateUsers()
 
   console.log(
     "Observer a alteração dos valores a cada vez que apertar o botão",
