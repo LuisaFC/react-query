@@ -1,15 +1,21 @@
 import { useEffect } from "react";
 import { useUsers } from "./hooks/useUsers";
 import { useMutation } from "@tanstack/react-query";
+import { IUser } from "./types";
 
 export function Users() {
   const { data, isLoading, refetch, isFetching, isPending, error, isError } =
     useUsers();
 
   const {mutate} = useMutation({
-    mutationFn: async (variables: {name: string, email: string}) => {
-      console.log("variables", variables);
-      console.log('Mutation func executou')
+    mutationFn: async ({name, email}: {name: string, email: string}): Promise<IUser> => {
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({name, email})
+      })
+
+      return response.json()
     }
   })
 
