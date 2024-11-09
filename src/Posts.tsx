@@ -8,6 +8,8 @@ export function Posts() {
     queryKey: ["users"],
     staleTime: 5000,
     gcTime: 10000,
+    refetchOnWindowFocus: false,
+    refetchInterval: 1000,
     queryFn: async (): Promise<IUser[]> => {
       await sleep();
       const response = await fetch("http://localhost:3000/users");
