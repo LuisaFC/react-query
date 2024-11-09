@@ -7,7 +7,8 @@ export function Users() {
     useUsers();
 
   const {mutate} = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (variables: {name: string, email: string}) => {
+      console.log("variables", variables);
       console.log('Mutation func executou')
     }
   })
@@ -32,7 +33,10 @@ export function Users() {
     console.log("nome: ", elements.name.value)
     console.log("email: ", elements.email.value)
 
-    mutate()
+    mutate({
+      email: elements.email.value,
+      name: elements.name.value
+    })
   }
 
   return (
