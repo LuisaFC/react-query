@@ -8,7 +8,7 @@ export function Users() {
   const { data: users, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error: usersError, isError } =
     useUsers();
 
-  const {mutate, isPending, data, error} = useMutation({
+  const {mutateAsync, isPending, data, error} = useMutation({
     mutationFn: async ({name, email}: {name: string, email: string}): Promise<IUser> => {
       await sleep()
       const response = await fetch("http://localhost:3000/users", {
@@ -42,7 +42,7 @@ export function Users() {
 
   useEffect(() => {}, [isError]);
 
-  function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const elements = event.currentTarget.elements as typeof event.currentTarget.elements & {
@@ -53,10 +53,12 @@ export function Users() {
     console.log("nome: ", elements.name.value)
     console.log("email: ", elements.email.value)
 
-    mutate({
+    const data = await mutateAsync({
       email: elements.email.value,
       name: elements.name.value
     })
+
+    console.log("asyncData", data)
   }
 
   return (
