@@ -9,6 +9,8 @@ export function Users() {
     enabled: false,
     queryKey: ["users"],
     staleTime: 5000,
+    retry: 2,
+    retryDelay: 3000,
     queryFn: async (): Promise<IUser[]> => {
       // throw new Error("Deu erro!")
       await sleep();
