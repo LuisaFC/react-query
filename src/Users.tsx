@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { useUsers } from "./hooks/useUsers";
 import { useMutation } from "@tanstack/react-query";
 import { IUser } from "./types";
+import { sleep } from "./sleep";
 
 export function Users() {
-  const { data, isLoading, refetch, isFetching, isPending, error, isError } =
+  const { data, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error, isError } =
     useUsers();
 
-  const {mutate} = useMutation({
+  const {mutate, isPending} = useMutation({
     mutationFn: async ({name, email}: {name: string, email: string}): Promise<IUser> => {
+      await sleep()
       const response = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: {'content-type': 'application/json'},
@@ -21,8 +23,8 @@ export function Users() {
 
   console.log(
     "Observer a alteração dos valores a cada vez que apertar o botão",
-    isPending,
-    isLoading,
+    isQueryPending,
+    isUsersLoading,
     isFetching
   );
 
@@ -52,7 +54,9 @@ export function Users() {
           <input className="outline-none p1 rounded-md text-zinc-900" type="text" placeholder="Nome" name="name"/>
           <input className="outline-none p1 rounded-md text-zinc-900" type="text" placeholder="Email"name="email"/>
 
-          <button className="bg-blue-400 py-2 text-zinc-950 rounded-md">Cadastrar</button>
+          <button className="bg-blue-400 py-2 text-zinc-950 rounded-md">
+            {isPending ? 'Cadastrando' : 'Cadastar'}
+          </button>
         </form>
 
       </div>
@@ -65,7 +69,7 @@ export function Users() {
         Listar Usuarios
       </button>
 
-      {isLoading && "Carregando..."}
+      {isUsersLoading && "Carregando..."}
       {isFetching && <small>Fetching...</small>}
       {error && <h1 className="text-red-400">{error.toString()}</h1>}
 
