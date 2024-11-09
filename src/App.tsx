@@ -20,7 +20,7 @@ export function App() {
       <BrowserRouter>
         <ul>
           <li>
-            <Link to="/">Usuários</Link>
+            <Link className="m-2" to="/">Usuários</Link>
             <Link to="/posts">Posts</Link>
           </li>
         </ul>
