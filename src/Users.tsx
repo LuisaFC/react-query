@@ -5,10 +5,10 @@ import { IUser } from "./types";
 import { sleep } from "./sleep";
 
 export function Users() {
-  const { data: users, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error, isError } =
+  const { data: users, isLoading: isUsersLoading, refetch, isFetching, isPending: isQueryPending, error: usersError, isError } =
     useUsers();
 
-  const {mutate, isPending, data} = useMutation({
+  const {mutate, isPending, data, error} = useMutation({
     mutationFn: async ({name, email}: {name: string, email: string}): Promise<IUser> => {
       await sleep()
       const response = await fetch("http://localhost:3000/users", {
@@ -18,6 +18,15 @@ export function Users() {
       })
 
       return response.json()
+    },
+    onError: (error, variables) => {
+      console.log(`Erro na request. \n${error.toString()} \n${variables}`)
+    },
+    onSuccess: (data, variables) => {
+      console.log("onSucess", {data, variables})
+    },
+    onSettled: () => {
+      console.log("Terminou a execução")
     }
   })
 
@@ -29,6 +38,7 @@ export function Users() {
   );
 
   console.log("data", data)
+  console.log("error", error)
 
   useEffect(() => {}, [isError]);
 
@@ -73,7 +83,7 @@ export function Users() {
 
       {isUsersLoading && "Carregando..."}
       {isFetching && <small>Fetching...</small>}
-      {error && <h1 className="text-red-400">{error.toString()}</h1>}
+      {usersError && <h1 className="text-red-400">{usersError.toString()}</h1>}
 
       {users?.map((user) => (
         <div key={user.id}>
